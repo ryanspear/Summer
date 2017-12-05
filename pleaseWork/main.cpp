@@ -34,8 +34,8 @@ int main(int argv, char** argc) {
     Vec3b defaultPix = {220, 100, 50};
     
     
-    Mat left = imread("left.jpg" , CV_LOAD_IMAGE_UNCHANGED);
-    Mat right = imread("right.jpg" , CV_LOAD_IMAGE_UNCHANGED);
+    Mat left = imread("carLeft.jpg" , CV_LOAD_IMAGE_UNCHANGED);
+    Mat right = imread("carRight.jpg" , CV_LOAD_IMAGE_UNCHANGED);
     Mat output = Mat::zeros(left.size(), CV_8UC3); // fills an empty output with black pixels
     
     if (left.empty() || right.empty()){
