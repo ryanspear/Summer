@@ -68,8 +68,7 @@ int main(int argv, char** argc) {
                     visited[i] = true;
                 } else if(!visited[i]){
                     output.at<Vec3b>(rows,i) = randomPixel(); // if they're not the same make it a random colour
-                } /* Problem: Doing this will overwrite previously visited pixels that were the same. Do pixels need
-                   a "visited" variable to test whether they've already been made default pix colour.*/
+                }
                 i++;
             }
         }
