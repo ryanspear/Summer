@@ -34,6 +34,7 @@ int main(int argv, char** argc) {
     Vec3b defaultPix = {220, 100, 50};
     
     
+    
     Mat left = imread("carLeft.jpg" , CV_LOAD_IMAGE_UNCHANGED);
     Mat right = imread("carRight.jpg" , CV_LOAD_IMAGE_UNCHANGED);
     Mat output = Mat::zeros(left.size(), CV_8UC3); // fills an empty output with black pixels
@@ -50,10 +51,11 @@ int main(int argv, char** argc) {
         }
         for(int cols = 0; cols < left.cols; cols++){
             Vec3b leftIntensity = left.at<Vec3b>(rows,cols);
+            output.at<Vec3b>(rows,cols) = leftIntensity;
             float B = leftIntensity.val[0]/10; // blue, green & red values
             float G = leftIntensity.val[1]/10; // divided by 10 so colour doesn't have to be exactly the same
             float R = leftIntensity.val[2]/10; // just close enough
-            int i = cols;
+            int i = cols+15;
             
             /* goes along the row until eye width apart comparing each pixel in the right image to the original pixel in the left image */
             while(i < cols + eyeWidth && i < left.cols){
@@ -62,9 +64,9 @@ int main(int argv, char** argc) {
                 float Gcompare = (rightIntensity.val[1])/10;
                 float Rcompare = (rightIntensity.val[2])/10;
                 
-                if(B == Bcompare && G == Gcompare && R == Rcompare){ // if they're close enough (divided by 10)
+                if(B == Bcompare && G == Gcompare && R == Rcompare && !visited[i]){ // if they're close enough (divided by 10)
                     count++;
-                    output.at<Vec3b>(rows,i) = leftIntensity; // output pixel same colour as left pixel
+                    output.at<Vec3b>(rows,i) = leftIntensity; // corresponding pixel in the right image is the same colour in the output as the left image
                     visited[i] = true;
                 } else if(!visited[i]){
                     output.at<Vec3b>(rows,i) = randomPixel(); // if they're not the same make it a random colour
