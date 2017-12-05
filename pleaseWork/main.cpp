@@ -14,6 +14,16 @@
 using namespace cv;
 using namespace std;
 
+Vec3b randomPixel(){
+    Vec3b rPixel;
+    int B = rand() % 256;
+    int G = rand() % 256;
+    int R = rand() % 256;
+    
+    rPixel = {static_cast<unsigned char>(B), static_cast<unsigned char>(G), static_cast<unsigned char>(R)};
+    return rPixel;
+}
+
 /* creates an output image comparing pixels in the right image to the left image.
  if any the pixels in a row the size of eye width from the left image are the same(ish),
  that colour will be used in those positions in the output image.
@@ -21,8 +31,11 @@ using namespace std;
 int main(int argv, char** argc) {
     int count = 0; // tracks how many times a pixel in the right is the same as the left.
     double eyeWidth = 4.5*37.795276; // how many pixels the typical eyes are apart
-    Mat left = imread("houseLeft.jpg" , CV_LOAD_IMAGE_UNCHANGED);
-    Mat right = imread("houseRight.jpg" , CV_LOAD_IMAGE_UNCHANGED);
+    Vec3b defaultPix = {220, 100, 50};
+    
+    
+    Mat left = imread("left.jpg" , CV_LOAD_IMAGE_UNCHANGED);
+    Mat right = imread("right.jpg" , CV_LOAD_IMAGE_UNCHANGED);
     Mat output = Mat::zeros(left.size(), CV_8UC3); // fills an empty output with black pixels
     
     if (left.empty() || right.empty()){
@@ -48,7 +61,10 @@ int main(int argv, char** argc) {
                 if(B == Bcompare && G == Gcompare && R == Rcompare){ // if they're close enough (divided by 10)
                     count++;
                     output.at<Vec3b>(rows,i) = leftIntensity; // output pixel same colour as left pixel
-                }
+                } else{
+                    output.at<Vec3b>(rows,i) = randomPixel(); // if they're not the same make it a random colour
+                } /* Problem: Doing this will overwrite previously visited pixels that were the same. Do pixels need
+                   a "visited" variable to test whether they've already been made default pix colour.*/
                 i++;
             }
         }
@@ -68,4 +84,7 @@ int main(int argv, char** argc) {
     
     
 }
+
+
+
 
