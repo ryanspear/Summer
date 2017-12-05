@@ -44,6 +44,10 @@ int main(int argv, char** argc) {
     
     /* for loops iterating though ever pixel and getting the RGB values. */
     for(int rows = 0; rows < left.rows; rows++){
+        bool visited[left.cols];
+        for(int y = 0; y < left.cols; y++){
+            visited[y] = 0;
+        }
         for(int cols = 0; cols < left.cols; cols++){
             Vec3b leftIntensity = left.at<Vec3b>(rows,cols);
             float B = leftIntensity.val[0]/10; // blue, green & red values
@@ -52,7 +56,7 @@ int main(int argv, char** argc) {
             int i = cols;
             
             /* goes along the row until eye width apart comparing each pixel in the right image to the original pixel in the left image */
-            while(i < cols + eyeWidth){
+            while(i < cols + eyeWidth && i < left.cols){
                 Vec3b rightIntensity = right.at<Vec3b>(rows,i);
                 float Bcompare = (rightIntensity.val[0])/10;
                 float Gcompare = (rightIntensity.val[1])/10;
@@ -61,7 +65,8 @@ int main(int argv, char** argc) {
                 if(B == Bcompare && G == Gcompare && R == Rcompare){ // if they're close enough (divided by 10)
                     count++;
                     output.at<Vec3b>(rows,i) = leftIntensity; // output pixel same colour as left pixel
-                } else{
+                    visited[i] = true;
+                } else if(!visited[i]){
                     output.at<Vec3b>(rows,i) = randomPixel(); // if they're not the same make it a random colour
                 } /* Problem: Doing this will overwrite previously visited pixels that were the same. Do pixels need
                    a "visited" variable to test whether they've already been made default pix colour.*/
