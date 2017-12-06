@@ -57,8 +57,8 @@ int main(int argv, char** argc) {
             
             /* goes along the row until eye width apart comparing each pixel in the right image to the original pixel in the left image */
             while(i < cols + eyeWidth && i < left.cols){
-                Vec3b rightIntensity = right.at<Vec3b>(rows,i);
-                float Bcompare = (rightIntensity.val[0])/10;
+                Vec3b rightIntensity = right.at<Vec3b>(rows,i); // if a link is found must make output(rows,cols) be
+                float Bcompare = (rightIntensity.val[0])/10;    // the left images colour??
                 float Gcompare = (rightIntensity.val[1])/10;
                 float Rcompare = (rightIntensity.val[2])/10;
                 
