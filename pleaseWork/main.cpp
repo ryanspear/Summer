@@ -51,11 +51,10 @@ int main(int argv, char** argc) {
         }
         for(int cols = 0; cols < left.cols; cols++){
             Vec3b leftIntensity = left.at<Vec3b>(rows,cols);
-            output.at<Vec3b>(rows,cols) = leftIntensity;
             float B = leftIntensity.val[0]/10; // blue, green & red values
             float G = leftIntensity.val[1]/10; // divided by 10 so colour doesn't have to be exactly the same
             float R = leftIntensity.val[2]/10; // just close enough
-            int i = cols+15;
+            int i = cols;
             
             /* goes along the row until eye width apart comparing each pixel in the right image to the original pixel in the left image */
             while(i < cols + eyeWidth && i < left.cols){
@@ -67,6 +66,8 @@ int main(int argv, char** argc) {
                 if(B == Bcompare && G == Gcompare && R == Rcompare && !visited[i]){ // if they're close enough (divided by 10)
                     count++;
                     output.at<Vec3b>(rows,i) = leftIntensity; // corresponding pixel in the right image is the same colour in the output as the left image
+                    output.at<Vec3b>(rows,cols) = leftIntensity;
+                    
                     visited[i] = true;
                 } else if(!visited[i]){
                     output.at<Vec3b>(rows,i) = randomPixel(); // if they're not the same make it a random colour
