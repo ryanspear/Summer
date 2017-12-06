@@ -53,7 +53,7 @@ int main(int argv, char** argc) {
             float B = leftIntensity.val[0]/10; // blue, green & red values
             float G = leftIntensity.val[1]/10; // divided by 10 so colour doesn't have to be exactly the same
             float R = leftIntensity.val[2]/10; // just close enough
-            int i = cols - 50;
+            int i = cols - 50; //this gives the effect of having the right image start further to the right
             
             /* goes along the row until eye width apart comparing each pixel in the right image to the original pixel in the left image */
             while(i < cols + eyeWidth && i < left.cols){
