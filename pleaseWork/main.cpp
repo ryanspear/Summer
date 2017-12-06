@@ -62,9 +62,11 @@ int main(int argv, char** argc) {
                 float Gcompare = (rightIntensity.val[1])/10;
                 float Rcompare = (rightIntensity.val[2])/10;
                 
-                if(B == Bcompare && G == Gcompare && R == Rcompare){ // if they're close enough (divided by 10)
+                if(B == Bcompare && G == Gcompare && R == Rcompare && !visited[i]){ // if they're close enough (divided by 10)
+                    Vec3b samePix = randomPixel();
                     count++;
-                    output.at<Vec3b>(rows,i) = leftIntensity; // output pixel same colour as left pixel
+                    output.at<Vec3b>(rows,i) = samePix;
+                    output.at<Vec3b>(rows,cols) = samePix; // left and right eye positions the same random colour.
                     visited[i] = true;
                 } else if(!visited[i]){
                     output.at<Vec3b>(rows,i) = randomPixel(); // if they're not the same make it a random colour
