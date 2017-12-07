@@ -15,7 +15,12 @@
 using namespace cv;
 using namespace std;
 
-Vec3b randomPixel(){
+uchar randomPixelGrey(){
+    uchar gPixel = rand() % 256;
+    return gPixel;
+}
+
+Vec3b randomPixelColour(){
     Vec3b rPixel;
     int B = rand() % 256;
     int G = rand() % 256;
@@ -23,6 +28,23 @@ Vec3b randomPixel(){
     
     rPixel = {static_cast<unsigned char>(B), static_cast<unsigned char>(G), static_cast<unsigned char>(R)};
     return rPixel;
+}
+
+Vec3b seedPixelColour(int seed){
+    srand(seed);
+    Vec3b rPixel;
+    int B = rand() % 256;
+    int G = rand() % 256;
+    int R = rand() % 256;
+    
+    rPixel = {static_cast<unsigned char>(B), static_cast<unsigned char>(G), static_cast<unsigned char>(R)};
+    return rPixel;
+}
+
+uchar seedPixelGrey(int seed){
+    srand(seed);
+    uchar gPixel = rand() % 256;
+    return gPixel;
 }
 
 /* creates an output image comparing pixels in the right image to the left image.
@@ -42,7 +64,7 @@ int main(int argv, char** argc) {
     
     Mat left = imread("faceLeft.jpg" , CV_LOAD_IMAGE_UNCHANGED);
     Mat right = imread("faceRight.jpg" , CV_LOAD_IMAGE_UNCHANGED);
-    Mat output = Mat::zeros(left.size(), CV_8UC3); // fills an empty output with black pixels
+    Mat output = Mat::zeros(left.size(), CV_8UC1); // fills an empty output with black pixels
     int numberMatrix[left.rows][left.cols];
     int numMatIndex = 0;
     int numMatCurrent = numMatIndex;
@@ -53,7 +75,7 @@ int main(int argv, char** argc) {
     
     /* for loops iterating though every pixel and getting the RGB values. */
     for(int rows = 0; rows < left.rows; rows++){
-        
+        numMatIndex = 0;
         for(int cols = 0; cols < left.cols; cols++){
             Vec3b leftIntensity = left.at<Vec3b>(rows,cols);
             float B = leftIntensity.val[0]/10; // blue, green & red values
@@ -108,15 +130,22 @@ int main(int argv, char** argc) {
     }
     /* Deals with showing the images and their position on the monitor */
     
-    for(int rows = 0; rows < left.rows; rows++){
-        cout << numberMatrix[rows][1] << "\n";
-    }
     
     cout << "Count: " << count;
     duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     
+    for(int rows = 0; rows < output.rows; rows++){
+        for(int cols = 0; cols < output.cols; cols++){
+            if(numberMatrix[rows][cols] == 0){
+                output.at<uchar>(rows,cols) = randomPixelGrey();
+            } else {
+            output.at<uchar>(rows,cols) = seedPixelGrey(numberMatrix[rows][cols]);
+        }
+    }
+    }
+    
     std::cout<<"printf: "<< duration <<'\n';
-    namedWindow("Output", WINDOW_AUTOSIZE);
+    namedWindow("Output", WINDOW_FREERATIO);
     moveWindow("Output", 850, 100);
     namedWindow("Left", WINDOW_AUTOSIZE);
     moveWindow("Left", 50, 100);
@@ -125,6 +154,7 @@ int main(int argv, char** argc) {
     imshow("Left", left);
     imshow("Right", right);
     imshow("Output", output);
+    imwrite("Autostereo.jpg", output);
     waitKey(0);
     
     
