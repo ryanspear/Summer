@@ -16,11 +16,13 @@ using namespace cv;
 using namespace std;
 
 uchar randomPixelGrey(){
+    srand(time(NULL));
     uchar gPixel = rand() % 256;
     return gPixel;
 }
-
+/* returns a psudo-random pixel based on time */
 Vec3b randomPixelColour(){
+    srand(time(NULL));
     Vec3b rPixel;
     int B = rand() % 256;
     int G = rand() % 256;
@@ -29,7 +31,7 @@ Vec3b randomPixelColour(){
     rPixel = {static_cast<unsigned char>(B), static_cast<unsigned char>(G), static_cast<unsigned char>(R)};
     return rPixel;
 }
-
+/* returns a seeded RGB pixel */
 Vec3b seedPixelColour(int seed){
     srand(seed);
     Vec3b rPixel;
@@ -40,7 +42,7 @@ Vec3b seedPixelColour(int seed){
     rPixel = {static_cast<unsigned char>(B), static_cast<unsigned char>(G), static_cast<unsigned char>(R)};
     return rPixel;
 }
-
+/* returns a seeded greyscale pixel */
 uchar seedPixelGrey(int seed){
     srand(seed);
     uchar gPixel = rand() % 256;
@@ -56,7 +58,7 @@ int main(int argv, char** argc) {
     std::clock_t start;
     double duration;
     
-    start = std::clock();
+    start = std::clock(); // timing the program.
     
     
     int count = 0; // tracks how many times a pixel in the right is the same as the left.
@@ -104,7 +106,7 @@ int main(int argv, char** argc) {
                 if(B == Bcompare && G == Gcompare && R == Rcompare){ // if the pixels are the same(ish)
                     count++;
                     /* if pixel hasn't been given a value yet then give it the current value.
-                       if pixel has a value that is different, replace every pixel with that value (including the current pixel) with the current value */
+                     if pixel has a value that is different, replace every pixel with that value (including the current pixel) with the current value */
                     if(numberMatrix[rows][i] == 0){
                         numberMatrix[rows][i] = numMatCurrent;
                     } else {
@@ -118,33 +120,33 @@ int main(int argv, char** argc) {
                         }
                     }
                 }
-                    //output.at<Vec3b>(rows,i) = leftIntensity; // output pixel same colour as left pixel
-                    
+                //output.at<Vec3b>(rows,i) = leftIntensity; // output pixel same colour as left pixel
+                
                 /*} else if(!visited[i]){
-                    output.at<Vec3b>(rows,i) = randomPixel(); // if they're not the same make it a random colour
-                }*/ /* Problem: Doing this will overwrite previously visited pixels that were the same. Do pixels need
-                   a "visited" variable to test whether they've already been made default pix colour.*/
+                 output.at<Vec3b>(rows,i) = randomPixel(); // if they're not the same make it a random colour
+                 }*/ /* Problem: Doing this will overwrite previously visited pixels that were the same. Do pixels need
+                      a "visited" variable to test whether they've already been made default pix colour.*/
                 i++;
             }
         }
     }
-    /* Deals with showing the images and their position on the monitor */
     
-    
-    cout << "Count: " << count;
-    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-    
+    /* look at every item in the numbered matrix, every pixel with the same number gets given same grey pixel
+     if the number is 0 it is given a random greyscale pixel */
     for(int rows = 0; rows < output.rows; rows++){
         for(int cols = 0; cols < output.cols; cols++){
             if(numberMatrix[rows][cols] == 0){
                 output.at<uchar>(rows,cols) = randomPixelGrey();
             } else {
-            output.at<uchar>(rows,cols) = seedPixelGrey(numberMatrix[rows][cols]);
+                output.at<uchar>(rows,cols) = seedPixelGrey(numberMatrix[rows][cols]); // same seed gives same pixel.
+            }
         }
     }
-    }
-    
+     /*end timer */
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     std::cout<<"printf: "<< duration <<'\n';
+    
+    /* Deals with showing the images and their position on the monitor */
     namedWindow("Output", WINDOW_FREERATIO);
     moveWindow("Output", 850, 100);
     namedWindow("Left", WINDOW_AUTOSIZE);
