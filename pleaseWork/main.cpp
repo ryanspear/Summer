@@ -77,12 +77,12 @@ int main(int argv, char** argc) {
     
     /* for loops iterating though every pixel and getting the RGB values. */
     for(int rows = 0; rows < left.rows; rows++){
-        numMatIndex = 0;
+        //numMatIndex = 0;
         for(int cols = 0; cols < left.cols; cols++){
             Vec3b leftIntensity = left.at<Vec3b>(rows,cols);
-            float B = leftIntensity.val[0]/10; // blue, green & red values
-            float G = leftIntensity.val[1]/10; // divided by 10 so colour doesn't have to be exactly the same
-            float R = leftIntensity.val[2]/10; // just close enough
+            float B = leftIntensity.val[0]/5; // blue, green & red values
+            float G = leftIntensity.val[1]/5; // divided by 5 so colour doesn't have to be exactly the same
+            float R = leftIntensity.val[2]/5; // just close enough
             int i = cols; // images start in same position
             
             /* deals with left pixel value. if not 0, keep using that value, otherwise give it a new value */
@@ -97,10 +97,10 @@ int main(int argv, char** argc) {
             
             /* goes along the row until eye width apart comparing each pixel in the right image to the original pixel in the left image */
             while(i < cols + eyeWidth && i < left.cols){
-                Vec3b rightIntensity = right.at<Vec3b>(rows,i); // if a link is found must make output(rows,cols) be
-                float Bcompare = (rightIntensity.val[0])/10;    // the left images colour??
-                float Gcompare = (rightIntensity.val[1])/10;
-                float Rcompare = (rightIntensity.val[2])/10;
+                Vec3b rightIntensity = right.at<Vec3b>(rows,i);
+                float Bcompare = (rightIntensity.val[0])/5;
+                float Gcompare = (rightIntensity.val[1])/5;
+                float Rcompare = (rightIntensity.val[2])/5 ;
                 
                 
                 if(B == Bcompare && G == Gcompare && R == Rcompare){ // if the pixels are the same(ish)
