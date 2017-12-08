@@ -74,7 +74,7 @@ int main(int argv, char** argc) {
             }
         }
     }
-    /* Deals with showing the images and their position on the monitor */
+    /* Deals with showing the images and their position on the monitor, add comment to push */
     cout << "Count: " << count;
     namedWindow("Output", WINDOW_AUTOSIZE);
     moveWindow("Output", 850, 100);
