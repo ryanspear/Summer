@@ -62,15 +62,16 @@ int main(int argv, char** argc) {
     
     
     int count = 0; // tracks how many times a pixel in the right is the same as the left.
-    double eyeWidth = 4.5*37.795276; // how many pixels the typical eyes are apart
+    double eyeWidth = 241; // how many pixels the typical eyes are apart
     
     Mat left = imread("faceLeft.jpg" , CV_LOAD_IMAGE_UNCHANGED);
     Mat right = imread("faceRight.jpg" , CV_LOAD_IMAGE_UNCHANGED);
-    Mat output = Mat::zeros(left.size(), CV_8UC1); // fills an empty output with black pixels
-    int numberMatrix[left.rows][left.cols];
-    int numMatIndex = 0;
-    int numMatCurrent = numMatIndex;
-    
+    Mat output = Mat::zeros(left.size(), CV_8UC3); // fills an empty output with black pixels
+    int numberMatrix[output.rows][output.cols]; // holds number representation of pixels that should be same colour
+    int numMatIndex = 0; // gives a new number to pixels that are a new colour
+    int numMatCurrent = numMatIndex; // current number value of the left pixel
+    cout << "left columns: " << left.cols << "\n";
+    cout << "left rows: " << left.rows << "\n";
     if (left.empty() || right.empty()){
         cout << "image(s) failed to load"; // if images aren't in the folder or named wrong
     }
@@ -87,10 +88,10 @@ int main(int argv, char** argc) {
             
             /* deals with left pixel value. if not 0, keep using that value, otherwise give it a new value */
             if(numberMatrix[rows][cols] != 0){
-                numMatCurrent = numberMatrix[rows][cols];
+                numMatCurrent = numberMatrix[rows][cols]; // current value is now this existing value
             } else {
-                numMatIndex++;
-                numMatCurrent = numMatIndex;
+                numMatIndex++; // if it is 0 the colour hasn't been seen yet, so give it a new colour value.
+                numMatCurrent = numMatIndex; // the current colour is now this new value
                 numberMatrix[rows][cols] = numMatIndex;
             }
             
@@ -120,25 +121,20 @@ int main(int argv, char** argc) {
                         }
                     }
                 }
-                //output.at<Vec3b>(rows,i) = leftIntensity; // output pixel same colour as left pixel
                 
-                /*} else if(!visited[i]){
-                 output.at<Vec3b>(rows,i) = randomPixel(); // if they're not the same make it a random colour
-                 }*/ /* Problem: Doing this will overwrite previously visited pixels that were the same. Do pixels need
-                      a "visited" variable to test whether they've already been made default pix colour.*/
                 i++;
             }
         }
     }
     
-    /* look at every item in the numbered matrix, every pixel with the same number gets given same grey pixel
-     if the number is 0 it is given a random greyscale pixel */
+    /* look at every item in the numbered matrix, every pixel with the same number gets given same grey/colour pixel
+     if the number is 0 it is given a random greyscale/colour pixel */
     for(int rows = 0; rows < output.rows; rows++){
         for(int cols = 0; cols < output.cols; cols++){
             if(numberMatrix[rows][cols] == 0){
-                output.at<uchar>(rows,cols) = randomPixelGrey();
+                output.at<Vec3b>(rows,cols) = randomPixelColour();
             } else {
-                output.at<uchar>(rows,cols) = seedPixelGrey(numberMatrix[rows][cols]); // same seed gives same pixel.
+                output.at<Vec3b>(rows,cols) = seedPixelColour(numberMatrix[rows][cols]); // same seed gives same pixel.
             }
         }
     }
@@ -156,7 +152,7 @@ int main(int argv, char** argc) {
     imshow("Left", left);
     imshow("Right", right);
     imshow("Output", output);
-    imwrite("Autostereo.jpg", output);
+    //imwrite("Autostereo.jpg", output);
     waitKey(0);
     
     
