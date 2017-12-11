@@ -64,14 +64,13 @@ int main(int argv, char** argc) {
     int count = 0; // tracks how many times a pixel in the right is the same as the left.
     double eyeWidth = 241; // how many pixels the typical eyes are apart
     
-    Mat left = imread("faceLeft.jpg" , CV_LOAD_IMAGE_UNCHANGED);
-    Mat right = imread("faceRight.jpg" , CV_LOAD_IMAGE_UNCHANGED);
+    Mat left = imread("FountainLeft.jpg" , CV_LOAD_IMAGE_UNCHANGED);
+    Mat right = imread("FountainRight.jpg" , CV_LOAD_IMAGE_UNCHANGED);
     Mat output = Mat::zeros(left.size(), CV_8UC3); // fills an empty output with black pixels
     int numberMatrix[output.rows][output.cols]; // holds number representation of pixels that should be same colour
     int numMatIndex = 0; // gives a new number to pixels that are a new colour
     int numMatCurrent = numMatIndex; // current number value of the left pixel
-    cout << "left columns: " << left.cols << "\n";
-    cout << "left rows: " << left.rows << "\n";
+    
     if (left.empty() || right.empty()){
         cout << "image(s) failed to load"; // if images aren't in the folder or named wrong
     }
@@ -80,6 +79,7 @@ int main(int argv, char** argc) {
     for(int rows = 0; rows < left.rows; rows++){
         //numMatIndex = 0;
         for(int cols = 0; cols < left.cols; cols++){
+            cout << "looping through every row col in left. rows: " << rows << ", cols: " << cols << "\n";
             Vec3b leftIntensity = left.at<Vec3b>(rows,cols);
             float B = leftIntensity.val[0]/5; // blue, green & red values
             float G = leftIntensity.val[1]/5; // divided by 5 so colour doesn't have to be exactly the same
@@ -97,7 +97,7 @@ int main(int argv, char** argc) {
             
             
             /* goes along the row until eye width apart comparing each pixel in the right image to the original pixel in the left image */
-            while(i < cols + eyeWidth && i < left.cols){
+            while(i < cols + eyeWidth && i < right.cols){
                 Vec3b rightIntensity = right.at<Vec3b>(rows,i);
                 float Bcompare = (rightIntensity.val[0])/5;
                 float Gcompare = (rightIntensity.val[1])/5;
@@ -113,7 +113,7 @@ int main(int argv, char** argc) {
                     } else {
                         if(numberMatrix[rows][i] != numMatCurrent){
                             int change = numberMatrix[rows][i];
-                            for(int j = 0; j < left.cols; j++){
+                            for(int j = 0; j < output.cols; j++){
                                 if(numberMatrix[rows][j] == change){
                                     numberMatrix[rows][j] = numMatCurrent;
                                 }
@@ -127,14 +127,29 @@ int main(int argv, char** argc) {
         }
     }
     
+    cout << "left columns: " << left.cols << "\n";
+    cout << "left rows: " << left.rows << "\n";
+    cout << "output columns: " << output.cols << "\n";
+    cout << "output rows: " << output.rows << "\n";
+    
+    Vec3b colour[numMatIndex];
+    long colourIndex = 0;
+    Vec3b empty = {0,0,0};
     /* look at every item in the numbered matrix, every pixel with the same number gets given same grey/colour pixel
      if the number is 0 it is given a random greyscale/colour pixel */
-    for(int rows = 0; rows < output.rows; rows++){
-        for(int cols = 0; cols < output.cols; cols++){
+    for(int rows = 0; rows < output.rows-1; rows++){
+        for(int cols = 0; cols < output.cols-1; cols++){
             if(numberMatrix[rows][cols] == 0){
                 output.at<Vec3b>(rows,cols) = randomPixelColour();
             } else {
-                output.at<Vec3b>(rows,cols) = seedPixelColour(numberMatrix[rows][cols]); // same seed gives same pixel.
+                colourIndex = numberMatrix[rows][cols];
+                if(colour[colourIndex] == empty){
+                colour[colourIndex] = randomPixelColour();
+            // same seed gives same pixel.
+                }
+                output.at<Vec3b>(rows,cols) = colour[colourIndex];
+                
+                
             }
         }
     }
