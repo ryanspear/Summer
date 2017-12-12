@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4F6F0E591FD35EF100EA6C5A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F6F0E581FD35EF100EA6C5A /* main.cpp */; };
+		4FD478221FDF7BEA00F06948 /* autoStereo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FD478201FDF7BEA00F06948 /* autoStereo.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		4F6F0E551FD35EF100EA6C5A /* pleaseWork */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pleaseWork; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F6F0E581FD35EF100EA6C5A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		4FD478201FDF7BEA00F06948 /* autoStereo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = autoStereo.cpp; sourceTree = "<group>"; };
+		4FD478211FDF7BEA00F06948 /* autoStereo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = autoStereo.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				4F6F0E581FD35EF100EA6C5A /* main.cpp */,
+				4FD478201FDF7BEA00F06948 /* autoStereo.cpp */,
+				4FD478211FDF7BEA00F06948 /* autoStereo.hpp */,
 			);
 			path = pleaseWork;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FD478221FDF7BEA00F06948 /* autoStereo.cpp in Sources */,
 				4F6F0E591FD35EF100EA6C5A /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
