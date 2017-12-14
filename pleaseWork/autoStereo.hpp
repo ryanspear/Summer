@@ -29,7 +29,7 @@ public:
     Mat produceOutput(int *numberMatrix, Mat output, int numMatIndex, int height);
     
     void showOutput(Mat output, Mat left, Mat right);
-    int getHeight();
+    int getWidth();
     int* getNumberMatrix();
     Mat getOutput();
     int getNumMatIndex();
